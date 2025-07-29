@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>وضعیت سرور</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Vazirmatn', sans-serif;
+      background-image: url('https://wallpapercave.com/wp/wp2757874.jpg');
+      background-size: cover;
+      background-position: center;
+      direction: rtl;
+      color: white;
+      text-align: center;
+    }
+
+    .server-box {
+      background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+                  url('https://media.forgecdn.net/attachments/825/970/ctb_3.jpg') no-repeat center center;
+      background-size: cover;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+      max-width: 400px;
+      margin: 100px auto 20px;
+      padding: 30px 20px;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .wifi-icon {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #121212;
+      padding: 5px;
+      border-radius: 50%;
+      border: 2px solid red;
+      box-shadow: 0 0 10px red;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+    }
+
+    .wifi-icon img {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.4s ease;
+    }
+
+    .connecting {
+      border-color: #00ff66 !important;
+      box-shadow: 0 0 15px #00ff66 !important;
+      animation: spin 1.2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translateX(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg); }
+    }
+
+    .connecting img {
+      transform: scale(1.5);
+    }
+
+    .server-box h2 {
+      font-size: 24px;
+      margin-top: 40px;
+      transition: color 0.3s ease;
+    }
+
+    .status-default {
+      color: white;
+    }
+
+    .status-connecting {
+      color: #63e68a;
+      text-shadow: 0 0 10px #63e68a;
+    }
+
+    .status-offline {
+      color: #ff4444;
+    }
+
+    .alert {
+      margin-top: 25px;
+      font-size: 16px;
+      color: #ffaaaa;
+    }
+
+    .connect-btn {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #2196f3;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .connect-btn:hover {
+      background-color: #1976d2;
+    }
+
+    .message-box {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #63e68a;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="server-box">
+    <div class="wifi-icon" id="wifiIcon">
+      <img src="https://cdn-icons-png.flaticon.com/512/8603/8603448.png" alt="قطع اتصال">
+    </div>
+
+    <h2 id="statusTitle" class="status-default">کلیک کنید</h2>
+    <p class="alert">⛔ برای اتصال به ادمین پیام بدهید</p>
+
+    <button class="connect-btn" onclick="startConnection()">اتصال</button>
+    <div id="message" class="message-box">در حال بررسی وضعیت سرور...</div>
+  </div>
+
+  <script>
+    function startConnection() {
+      const icon = document.getElementById('wifiIcon');
+      const title = document.getElementById('statusTitle');
+      const message = document.getElementById('message');
+
+      icon.classList.add('connecting');
+      title.textContent = 'در حال اتصال...';
+      title.className = 'status-connecting';
+      message.style.display = 'block';
+      message.textContent = 'لطفاً منتظر بمانید...';
+
+      setTimeout(() => {
+        icon.classList.remove('connecting');
+        title.textContent = 'سرور آفلاین است!';
+        title.className = 'status-offline';
+        message.textContent = '⛔ اتصال ممکن نیست. سرور در حال حاضر آفلاین است.';
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
