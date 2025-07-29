@@ -16,8 +16,6 @@
       direction: rtl;
       color: white;
       text-align: center;
-      /* برای اینکه فوتر ثابت روی محتوا نیاد */
-      padding-bottom: 56px;
     }
 
     .server-box {
@@ -78,12 +76,18 @@
       transition: color 0.3s ease;
     }
 
-    .status-default { color: white; }
+    .status-default {
+      color: white;
+    }
+
     .status-connecting {
       color: #63e68a;
       text-shadow: 0 0 10px #63e68a;
     }
-    .status-offline { color: #ff4444; }
+
+    .status-offline {
+      color: #ff4444;
+    }
 
     .alert {
       margin-top: 25px;
@@ -102,36 +106,16 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-    .connect-btn:hover { background-color: #1976d2; }
+
+    .connect-btn:hover {
+      background-color: #1976d2;
+    }
 
     .message-box {
       margin-top: 20px;
       font-size: 14px;
       color: #63e68a;
       display: none;
-    }
-
-    /* --- فوتر لینک (نئون قرمز خیلی کم) --- */
-    .notice-footer {
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      padding: 10px 16px;
-      background: rgba(0, 0, 0, 0.55);
-      text-align: center;
-      z-index: 9999;
-      backdrop-filter: blur(2px);
-    }
-    .notice-footer a {
-      color: #ff4040;
-      font-weight: 700;
-      text-decoration: none;
-      text-shadow: 0 0 4px rgba(255,64,64,0.7), 0 0 8px rgba(255,64,64,0.35);
-      transition: text-shadow 0.25s ease, opacity 0.25s ease;
-    }
-    .notice-footer a:hover,
-    .notice-footer a:focus {
-      text-shadow: 0 0 6px rgba(255,64,64,0.9), 0 0 12px rgba(255,64,64,0.5);
-      opacity: 0.95;
     }
   </style>
 </head>
@@ -169,9 +153,7 @@
       }, 3000);
     }
   </script>
-
-  <!-- فوتر با متن ساده لینکی -->
-  <div class="notice-footer" dir="rtl">
+   <div class="notice-footer" dir="rtl">
     <a href="https://sites.google.com/view/server-main-/%D8%B5%D9%81%D8%AD%D9%87-%D8%A7%D8%B5%D9%84%DB%8C" target="_blank" rel="noopener">
       در صورت مشکل به سایت دوم مراجعه کنید (سرور 2) — در این قسمت کلیک کنید *
     </a>
@@ -179,3 +161,4 @@
 
 </body>
 </html>
+ 
