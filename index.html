@@ -1,330 +1,408 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>داشبورد گیمینگ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GameHelper — قیمت‌ها و ابزارهای گیمینگ</title>
+  <!-- Tailwind via CDN (for quick single-file demo) -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Vazirmatn', sans-serif;
-      background: #000 url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/273126115942507.6067070353764.gif') no-repeat center
-        center fixed;
-      background-size: cover;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 60px;
-      position: relative;
-    }
-    /* دکمه پنل کاربری */
-    .user-panel-btn {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background-color: #88f;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      cursor: pointer;
-      z-index: 1000;
-      font-weight: bold;
-      color: white;
-      box-shadow: 0 0 10px #88f;
-      transition: background-color 0.3s ease;
-    }
-    .user-panel-btn:hover {
-      background-color: #55f;
-    }
-    /* پنل کاربری */
-    .user-panel {
-      position: fixed;
-      top: 50px;
-      left: 10px;
-      background-color: rgba(17, 17, 17, 0.95);
-      padding: 1rem 1.5rem;
-      border-radius: 15px;
-      border: 2px solid #f0f;
-      z-index: 1000;
-      width: 280px;
-      display: none;
-      box-shadow: 0 0 15px #f0f;
-      user-select: none;
-    }
-    .user-panel h2 {
-      color: #0ff;
-      margin-top: 0;
-      margin-bottom: 1rem;
-      text-align: center;
-      text-shadow: 0 0 8px #0ff;
-    }
-    .user-panel p {
-      margin: 0.4rem 0;
-      font-size: 1rem;
-      border-bottom: 1px solid #444;
-      padding-bottom: 0.3rem;
-    }
-
-    .container {
-      padding: 2rem;
-      max-width: 1200px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3rem;
-    }
-    .quick-match {
-      text-align: center;
-      margin-top: 0;
-      background: rgba(0, 100, 0, 0.1);
-      padding: 1.5rem 2rem;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #0f0;
-      width: 100%;
-      max-width: 400px;
-    }
-    .quick-match select,
-    .quick-match button {
-      display: block;
-      margin: 1rem auto;
-      padding: 0.5rem 1rem;
-      background-color: #0f0;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      color: black;
-      text-shadow: none;
-      transition: background-color 0.3s ease;
-    }
-    .quick-match select:hover,
-    .quick-match button:hover {
-      background-color: #0c0;
-    }
-    .quick-match h1 {
-      color: #00ffff;
-      background: transparent;
-      background-color: #0c0;
-      text-shadow: 0 0 10px #0f0;
-      margin: 0 0 1rem 0;
-    }
-    .status-msg {
-      font-weight: bold;
-      margin-top: 1rem;
-      min-height: 24px;
-    }
-    #serverList {
-      margin-top: 1rem;
-    }
-    /* لیست سرورها */
-    .server-boxes {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      width: 100%;
-      max-width: 900px;
-    }
-    .server-item {
-      background-color: rgba(17, 17, 17, 0.9);
-      border: 3px solid #0f0;
-      border-radius: 20px;
-      padding: 1rem;
-      width: 250px;
-      text-align: center;
-      box-shadow: 0 0 15px #0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
-      cursor: default;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    .server-item:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 30px #0f0;
-    }
-    .server-item img.main-img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 0.5rem;
-      object-fit: cover;
-      height: 140px;
-      user-select: none;
-      pointer-events: none;
-    }
-        .server-item .icon {
-      width: 40px;
-      margin-top: -25px;
-      filter: drop-shadow(0 0 2px black);
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .server-item h3 {
-      margin: 0.4rem 0 0.5rem 0;
-      font-weight: bold;
-      text-shadow: 0 0 5px #0f0;
-    }
-    .server-item p {
-      color: red;
-      margin: 0 0 1rem 0;
-      font-weight: bold;
-      text-shadow: 0 0 5px black;
-    }
-    .server-item button {
-      background-color: #0f0;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      color: black;
-      transition: background-color 0.3s ease;
-    }
-    .server-item button:hover {
-      background-color: #0c0;
-    }
-
-    /* پس‌زمینه کارت‌های سرور */
-    .server-item.bg1 {
-      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65k6y6vkbHJ9ZrgkqaXKZlJU5W7UKygQvNw&s');
-      background-size: cover;
-      background-position: center;
-      border-color: #4caf50;
-      box-shadow: 0 0 20px #4caf50;
-      color: white;
-      text-shadow: 0 0 6px black;
-    }
-    .server-item.bg2 {
-      background-image: url('https://4kwallpapers.com/images/walls/thumbs_2t/11129.png');
-      background-size: cover;
-      background-position: center;
-      border-color: #2196f3;
-      box-shadow: 0 0 20px #2196f3;
-      color: white;
-      text-shadow: 0 0 6px black;
-    }
+    /* کمی استایل سفارشی برای تم گیمینگ */
+    :root{--neon:#00baff;--neon2:#9b5cff}
+    body{background:linear-gradient(180deg,#05050a 0%, #0b0b14 60%);font-family: Vazirmatn, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter: blur(6px)}
   </style>
 </head>
-<body>
-  <button class="user-panel-btn" onclick="togglePanel()">پنل کاربری</button>
-  <div class="user-panel" id="userPanel">
-    <h2>پنل کاربری شما</h2>
-    <p><strong>رَنگ:</strong> فعال نشده!</p>
-    <p><strong>مدت بازی در سرور:</strong> 0 ساعت</p>
-    <p><strong>اشتراک:</strong> بدون اشتراک</p>
-  </div>
+<body class="text-gray-200">
+  <div id="root"></div>
 
-  <div class="container">
-    <div class="quick-match">
-      <h1>Quick Match</h1>
-      <button onclick="toggleServers()">سرورها ▲</button>
-      <div id="serverList" style="display:none;">
-        <select id="serverSelect">
-          <option value="1">سرور 1</option>
-          <option value="2">سرور 2</option>
-          <option value="3">سرور 3</option>
-        </select>
-        <button onclick="connectServer()">تأیید</button>
-        <div class="status-msg" id="status"></div>
-      </div>
-    </div>
+  <!-- React + ReactDOM + Babel (for single-file JSX) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
 
-    <div class="server-boxes">
-      <div class="server-item bg1">
-        <img
-          class="main-img"
-          src="https://i.ibb.co/0cM2fzX/wwii.png"
-          alt="WWII"
-          draggable="false"
-        />
-        <img
-          class="icon"
-          src="https://cdn-icons-png.flaticon.com/512/8925/8925522.png"
-          alt="icon"
-          draggable="false"
-        />
-        <h3>کلیک کنید</h3>
-        <p>برای اتصال به ادمین پیام بدهید</p>
-        <button onclick="alert('لطفاً به ادمین پیام دهید!')">اتصال</button>
-      </div>
-      <div class="server-item bg2">
-        <img
-          class="main-img"
-          src="https://i.ibb.co/vQf5W8B/cs2.png"
-          alt="CS2"
-          draggable="false"
-        />
-        <img
-          class="icon"
-          src="https://cdn-icons-png.flaticon.com/512/8925/8925522.png"
-          alt="icon"
-          draggable="false"
-        />
-        <h3>کلیک کنید</h3>
-        <p>برای اتصال به ادمین پیام بدهید</p>
-        <button onclick="alert('لطفاً به ادمین پیام دهید!')">اتصال</button>
-      </div>
-    </div>
-  </div>
+  <!-- App code -->
+  <script type="text/babel">
+  const { useState, useEffect } = React;
 
-  <script>
-    function togglePanel() {
-      const panel = document.getElementById('userPanel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-    }
+  /*******************************************
+   *  Single-file full-featured GameHelper
+   *  - همه در یک فایل index.html
+   *  - قیمت دلاری: Steam Store (via proxy AllOrigins)
+   *  - قیمت تومانی: منابع ایرانی (mock) + تبدیل نرخ ارز زنده
+   *  - مقایسه بین ریجن‌ها
+   *  - ابزارها: FPS calc, sensitivity converter
+   *******************************************/
 
-    function toggleServers() {
-      const list = document.getElementById('serverList');
-      list.style.display = list.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function connectServer() {
-      const server = document.getElementById('serverSelect').value;
-      const status = document.getElementById('status');
-
-      if (server === '3') {
-        status.innerHTML = '<span style="color: orange">سرور در دسترس نیست</span>';
-        return;
+  // Helper: fetch via AllOrigins to avoid CORS for public demo
+  async function fetchViaAllOrigins(url){
+    try{
+      const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+      const res = await fetch(proxy);
+      if(!res.ok) throw new Error('fetch failed');
+      return await res.text();
+    }catch(e){
+      console.warn('AllOrigins fetch failed', e);
+      // try an alternate public proxy
+      try{
+        const proxy2 = 'https://api.allorigins.cf/raw?url=' + encodeURIComponent(url);
+        const res2 = await fetch(proxy2);
+        return await res2.text();
+      }catch(err){
+        throw err;
       }
-
-      status.innerHTML = '<span style="color: white">در حال اتصال...</span>';
-      setTimeout(() => {
-        status.innerHTML = '<span style="color: red">اتصال قطع شد</span>';
-      }, 5000);
     }
+  }
+
+  // Mock Iranian price sources (در عمل این‌ها باید با API فروشگاه‌های ایرانی جایگزین شوند)
+  const IRAN_PRICES = {
+    // appid: price_in_toman
+    '570': 189000, // example
+    '730': 279000,
+    '1174180': 1590000
+  };
+
+  function currencyToToman(irrt){
+    // converter: IRR (rial) -> toman = rial / 10
+    return Math.round(irrt / 10);
+  }
+
+  // Main App
+  function App(){
+    const [appid, setAppid] = useState('1174180');
+    const [loading, setLoading] = useState(false);
+    const [game, setGame] = useState(null);
+    const [regions, setRegions] = useState(['US','TR','AR','BR','RU']);
+    const [regionPrices, setRegionPrices] = useState({});
+    const [usdToIrr, setUsdToIrr] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(()=>{
+      fetchRate();
+    },[]);
+
+    async function fetchRate(){
+      try{
+        const res = await fetch('https://api.exchangerate.host/convert?from=USD&to=IRR');
+        const j = await res.json();
+        setUsdToIrr(j.result || 42000*10);
+      }catch(e){
+        console.warn(e);
+        setUsdToIrr(420000); // fallback (IRR)
+      }
+    }
+
+    async function lookupApp(){
+      setLoading(true); setError(null); setGame(null); setRegionPrices({});
+      try{
+        // fetch base app details (US)
+        const url = `https://store.steampowered.com/api/appdetails?appids=${appid}&cc=US&l=en`;
+        const txt = await fetchViaAllOrigins(url);
+        const data = JSON.parse(txt);
+        const entry = data[appid];
+        if(!entry || !entry.success){ setError('اطلاعاتی یافت نشد. ID را بررسی کنید.'); setLoading(false); return; }
+        const details = entry.data;
+        const priceOverview = details.price_overview || null;
+        const usdPrice = priceOverview ? (priceOverview.final/100) : 0;
+
+        const meta = {
+          appid,
+          name: details.name || 'نام نامشخص',
+          usdPrice,
+          header_image: details.header_image || null,
+          short_desc: details.short_description || '',
+          release_date: details.release_date?.date || ''
+        };
+        setGame(meta);
+
+        // fetch region prices in parallel
+        const regMap = {};
+        await Promise.all(regions.map(async (cc) => {
+          try{
+            const u = `https://store.steampowered.com/api/appdetails?appids=${appid}&cc=${cc}&l=en`;
+            const t = await fetchViaAllOrigins(u);
+            const d = JSON.parse(t);
+            const e = d[appid];
+            if(e && e.success && e.data.price_overview){
+              const po = e.data.price_overview;
+              // final is in cents of local currency
+              const final = po.final / 100.0;
+              regMap[cc] = {price: final, currency: po.currency};
+            } else {
+              regMap[cc] = null;
+            }
+          }catch(err){ regMap[cc] = null; }
+        }));
+        setRegionPrices(regMap);
+
+      }catch(err){
+        console.error(err);
+        setError('خطا در دریافت اطلاعات قیمت');
+      }finally{ setLoading(false); }
+    }
+
+    // get iranian price (mock) or null
+    function getIranianPrice(aid){
+      return IRAN_PRICES[aid] || null;
+    }
+
+    // Tools: FPS calc
+    function FpsTool(){
+      const [gpuScore, setGpuScore] = useState(10000);
+      const [cpuScore, setCpuScore] = useState(7000);
+      const [resolution, setResolution] = useState('1080');
+      const [settings, setSettings] = useState('medium');
+      const est = Math.round((gpuScore*0.0008 + cpuScore*0.0003) * (resolution==='1080'?1: (resolution==='1440'?0.7:0.5)) * (settings==='high'?0.7: settings==='medium'?1:1.2));
+      return (
+        <div className="glass p-4 rounded-lg">
+          <h3 className="font-bold text-lg text-[var(--neon)] mb-2">FPS Calculator</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div>
+              <label className="text-sm">GPU score (estimate)</label>
+              <input type="range" min="1000" max="30000" value={gpuScore} onChange={e=>setGpuScore(+e.target.value)} />
+              <div className="text-sm">{gpuScore}</div>
+            </div>
+            <div>
+              <label className="text-sm">CPU score (estimate)</label>
+              <input type="range" min="1000" max="20000" value={cpuScore} onChange={e=>setCpuScore(+e.target.value)} />
+              <div className="text-sm">{cpuScore}</div>
+            </div>
+            <div>
+              <label className="text-sm">Resolution</label>
+              <select value={resolution} onChange={e=>setResolution(e.target.value)} className="w-full p-2 bg-[#0b1220] rounded">
+                <option value="1080">1920×1080</option>
+                <option value="1440">2560×1440</option>
+                <option value="2160">3840×2160</option>
+              </select>
+            </div>
+          </div>
+          <div className="mt-3">
+            <label className="text-sm">Graphics preset</label>
+            <div className="flex gap-2 mt-1">
+              <button onClick={()=>setSettings('low')} className={`px-3 py-1 rounded ${settings==='low'?'bg-[var(--neon)] text-black':'border'}`}>Low</button>
+              <button onClick={()=>setSettings('medium')} className={`px-3 py-1 rounded ${settings==='medium'?'bg-[var(--neon)] text-black':'border'}`}>Medium</button>
+              <button onClick={()=>setSettings('high')} className={`px-3 py-1 rounded ${settings==='high'?'bg-[var(--neon)] text-black':'border'}`}>High</button>
+            </div>
+          </div>
+          <div className="mt-3 font-semibold">Estimated FPS: <span className="text-yellow-300">{est}</span></div>
+        </div>
+      );
+    }
+
+    // Sensitivity converter (DPI and sensitivity between games)
+    function SensConverter(){
+      const [dpi, setDpi] = useState(800);
+      const [sens, setSens] = useState(1.0);
+      const [fromGame, setFromGame] = useState('CS2');
+      const [toGame, setToGame] = useState('Valorant');
+      // simple converter example
+      function convert(){
+        // This is a toy formula — real conversions require game-specific multipliers
+        const multiplier = (fromGame==='CS2' && toGame==='Valorant') ? 0.45 : 1.0;
+        return (sens * multiplier).toFixed(4);
+      }
+      return (
+        <div className="glass p-4 rounded-lg">
+          <h3 className="font-bold text-lg text-[var(--neon)] mb-2">Sensitivity Converter</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="text-sm">DPI</label>
+              <input type="number" value={dpi} onChange={e=>setDpi(+e.target.value)} className="w-full p-2 bg-[#0b1220] rounded" />
+            </div>
+            <div>
+              <label className="text-sm">Sensitivity ({fromGame})</label>
+              <input type="number" step="0.01" value={sens} onChange={e=>setSens(+e.target.value)} className="w-full p-2 bg-[#0b1220] rounded" />
+            </div>
+            <div>
+              <label className="text-sm">From</label>
+              <select value={fromGame} onChange={e=>setFromGame(e.target.value)} className="w-full p-2 bg-[#0b1220] rounded">
+                <option>CS2</option>
+                <option>Valorant</option>
+                <option>Dota2</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm">To</label>
+              <select value={toGame} onChange={e=>setToGame(e.target.value)} className="w-full p-2 bg-[#0b1220] rounded">
+                <option>Valorant</option>
+                <option>CS2</option>
+                <option>Dota2</option>
+              </select>
+            </div>
+          </div>
+          <div className="mt-3">Converted sensitivity ({toGame}): <span className="text-yellow-300">{convert()}</span></div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen p-6">
+        <header className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--neon)] to-[var(--neon2)] flex items-center justify-center text-black font-bold">G</div>
+            <div>
+              <div className="text-2xl font-bold">GameHelper</div>
+              <div className="text-xs text-gray-400">قیمت و ابزارهای گیمینگ — رایگان</div>
+            </div>
+          </div>
+          <div className="space-x-3 hidden md:block">
+            <button onClick={()=>{ window.scrollTo({top:0,behavior:'smooth'}) }} className="px-3 py-2 rounded bg-[var(--neon)] text-black">خانه</button>
+            <button onClick={()=>{ document.getElementById('tools').scrollIntoView({behavior:'smooth'}) }} className="px-3 py-2 rounded border">ابزارها</button>
+          </div>
+        </header>
+
+        <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <section className="lg:col-span-2 glass p-5 rounded-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <input className="flex-1 p-3 bg-[#0b1220] rounded" value={appid} onChange={e=>setAppid(e.target.value)} />
+              <button onClick={lookupApp} className="px-4 py-2 rounded bg-[var(--neon)] text-black">جستجوی AppID</button>
+            </div>
+
+            {loading && <div className="p-4">در حال بارگذاری...</div>}
+            {error && <div className="p-4 text-red-400">{error}</div>}
+
+            {game && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="col-span-2">
+                  <div className="flex gap-4 items-start">
+                    {game.header_image && <img src={game.header_image} className="w-40 rounded" alt="cover" />}
+                    <div>
+                      <h2 className="text-2xl font-bold">{game.name}</h2>
+                      <div className="text-sm text-gray-400">{game.short_desc}</div>
+                      <div className="mt-2 text-sm">Released: {game.release_date}</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 bg-[#070717] rounded">
+                    <div className="flex items-center justify-between">
+                      <div>💲 قیمت (USD)</div>
+                      <div className="font-bold text-green-300">${game.usdPrice}</div>
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-sm text-gray-300">
+                      <div>🔁 نرخ تبدیل (USD → IRR): {usdToIrr ? usdToIrr.toLocaleString() + ' IRR' : 'در حال دریافت...'}</div>
+                      <div>تبدیل به تومان: {usdToIrr ? currencyToToman(usdToIrr * game.usdPrice).toLocaleString() + ' تومان' : '...'}</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <h3 className="font-semibold mb-2">قیمت در ریجن‌ها</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {Object.keys(regionPrices).length===0 && <div className="text-sm text-gray-400">قیمت ریجن‌ها بارگذاری نشده</div>}
+                      {Object.entries(regionPrices).map(([cc,val])=> (
+                        <div key={cc} className="p-3 bg-[#0b1220] rounded flex items-center justify-between">
+                          <div>{cc}</div>
+                          <div>{val ? (val.price + ' ' + val.currency) : 'ناموجود'}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+
+                <aside className="p-3 bg-[#070717] rounded">
+                  <h4 className="font-semibold mb-2">قیمت تومانی (منابع ایرانی)</h4>
+                  <div className="text-sm text-gray-300">منبع: استیم‌گیفت / فروشگاه‌های ایرانی (نمونه)</div>
+                  <div className="mt-3 text-lg font-bold text-yellow-300">
+                    {getIranianPrice(appid) ? getIranianPrice(appid).toLocaleString() + ' تومان' : (usdToIrr ? currencyToToman(usdToIrr * game.usdPrice).toLocaleString() + ' تومان (تبدیل خودکار)' : '...')}
+                  </div>
+
+                  <div className="mt-4">
+                    <button onClick={()=>{ navigator.clipboard?.writeText(location.href); alert('آدرس کپی شد') }} className="w-full px-3 py-2 rounded border">کپی لینک</button>
+                  </div>
+
+                  <div className="mt-4 text-sm text-gray-400">
+                    <div>منبع دلار: Steam Store API</div>
+                    <div>منبع تومان: {getIranianPrice(appid)? 'فروشگاه‌های ایرانی (mock)' : 'تبدیل نرخ ارز'}</div>
+                  </div>
+                </aside>
+
+              </div>
+            )}
+
+          </section>
+
+          <aside id="tools" className="space-y-4">
+            <div className="glass p-4 rounded-lg">
+              <h3 className="font-bold text-lg text-[var(--neon)]">Quick Deals (Steam Featured)</h3>
+              <QuickDeals />
+            </div>
+
+            <div className="glass p-4 rounded-lg">
+              <FPSBox />
+            </div>
+
+            <div className="glass p-4 rounded-lg">
+              <SensitivityBox />
+            </div>
+
+          </aside>
+        </main>
+
+        <footer className="mt-8 text-center text-sm text-gray-400">GameHelper — نمونهٔ دمو • برای استفاده‌ی production نیاز به backend proxy، cache و API keys است</footer>
+      </div>
+    );
+
+    // Inline subcomponents using closures so everything stays in one file
+
+    function QuickDeals(){
+      const [deals, setDeals] = useState(null);
+      useEffect(()=>{ loadDeals(); },[]);
+      async function loadDeals(){
+        try{
+          // Steam has a featured API — we fetch via AllOrigins to avoid CORS
+          const url = 'https://store.steampowered.com/api/featuredcategories/';
+          const txt = await fetchViaAllOrigins(url);
+          const j = JSON.parse(txt);
+          // we try to extract specials or featured categories
+          const specials = j?.specials?.items || j?.topsellers?.items || [];
+          setDeals(specials.slice(0,8));
+        }catch(e){
+          console.warn('deals fetch failed', e);
+          setDeals([]);
+        }
+      }
+      return (
+        <div>
+          {deals===null && <div>در حال بارگذاری تخفیف‌ها...</div>}
+          {deals && deals.length===0 && <div className="text-sm text-gray-400">تخفیف خاصی یافت نشد (پروکسی ممکن است محدود باشد)</div>}
+          {deals && deals.length>0 && (
+            <div className="space-y-2">
+              {deals.map(d=> (
+                <div key={d.appid || d.id} className="p-2 bg-[#070717] rounded flex items-center gap-2">
+                  {d.small_capsule_image && <img src={d.small_capsule_image} className="w-14 h-6 object-cover rounded"/>}
+                  <div className="flex-1 text-sm">{d.name}</div>
+                  <div className="text-sm font-bold text-green-300">{d.discount_percent? `-${d.discount_percent}%` : ''}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function FPSBox(){
+      return (
+        <div>
+          <h4 className="font-semibold mb-2">FPS Calculator</h4>
+          <div>
+            {/* reuse FpsTool */}
+            <FpsTool />
+          </div>
+        </div>
+      );
+    }
+    function SensitivityBox(){
+      return (
+        <div>
+          <h4 className="font-semibold mb-2">Sensitivity Converter</h4>
+          <div><SensConverter /></div>
+        </div>
+      );
+    }
+  }
+
+  // render
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
-  <!-- ...کد قبلی بالا... -->
-
-  </div> <!-- پایان container -->
-<!-- بخش متن زیر صفحه -->
-<footer style="margin-top: 3rem; text-align: center; padding: 1rem;" dir="rtl">
-  <a
-    href="https://sites.google.com/view/server-main-/%D8%B5%D9%81%D8%AD%D9%87-%D8%A7%D8%B5%D9%84%DB%8C"
-    target="_blank" rel="noopener"
-    style="color:#ff2a6d; font-weight:bold; font-size:1.2rem; text-decoration:none; font-family:'Vazirmatn',sans-serif;
-           text-shadow:0 0 3px rgba(255,42,109,.6), 0 0 6px rgba(255,42,109,.35);"
-  >
-    در صورت مشکل، به سایت دوم مراجعه کنید (سرور 2) — اینجا کلیک کنید *
-  </a>
-</footer>
-
-  
-
-<!-- ...ادامه کد ... -->
-
 </body>
 </html>
